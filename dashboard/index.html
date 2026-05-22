@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reports — Centro de Mando</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0e2019;
+    --surface: #152e23;
+    --surface2: #1d3d2f;
+    --border: rgba(100,200,155,0.12);
+    --border2: rgba(100,200,155,0.22);
+    --text: #e0f5ea;
+    --text2: #7fbfa0;
+    --text3: #4a8068;
+    --accent: #4db882;
+    --accent-dim: rgba(77,184,130,0.18);
+
+    --alta: #ff6b6b;
+    --alta-bg: rgba(255,107,107,0.12);
+    --media: #ffc542;
+    --media-bg: rgba(255,197,66,0.12);
+    --baja: #4db882;
+    --baja-bg: rgba(77,184,130,0.12);
+
+    --bug: #ff8c42;
+    --bug-bg: rgba(255,140,66,0.12);
+    --incidente: #ff6b6b;
+    --incidente-bg: rgba(255,107,107,0.12);
+    --tarea: #4db882;
+    --tarea-bg: rgba(77,184,130,0.14);
+    --otro: #7fbfa0;
+    --otro-bg: rgba(127,191,160,0.12);
+
+    --nuevo: #2563eb;
+    --nuevo-bg: rgba(37,99,235,0.15);
+    --en_proceso: #ea580c;
+    --en_proceso-bg: rgba(234,88,12,0.12);
+    --resuelto: #dc2626;
+    --resuelto-bg: rgba(220,38,38,0.12);
+    --visto: #0891b2;
+    --visto-bg: rgba(8,145,178,0.15);
+    --en_revision: #7c3aed;
+    --en_revision-bg: rgba(124,58,237,0.15);
+  }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 220px;
+    min-height: 100vh;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    flex-shrink: 0;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 4px;
+  }
+
+  .logo-icon {
+    width: 28px;
+    height: 28px;
+    background: #285A48;
+    border: 1px solid rgba(77,184,130,0.3);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logo-icon svg { width: 16px; height: 16px; fill: white; }
+
+  .logo-text {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: var(--text);
+  }
+
+  .logo-sub {
+    font-size: 10px;
+    color: var(--text3);
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 0.08em;
+  }
+
+  .nav-section label {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--text3);
+    text-transform: uppercase;
+    padding: 0 8px;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--text2);
+    transition: all 0.15s;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+  }
+
+  .nav-item:hover { background: var(--surface2); color: var(--text); }
+  .nav-item.active { background: var(--accent-dim); color: var(--accent); }
+
+  .nav-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .badge {
+    margin-left: auto;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 10px;
+    background: var(--surface2);
+    color: var(--text2);
+  }
+
+  .nav-item.active .badge { background: var(--accent-dim); color: var(--accent); }
+
+  .sync-btn {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border2);
+    background: none;
+    color: var(--text2);
+    font-size: 12px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+    width: 100%;
+  }
+
+  .sync-btn:hover { background: var(--surface2); color: var(--text); border-color: var(--border2); }
+
+  /* Main */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .topbar {
+    padding: 16px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .topbar h1 {
+    font-size: 15px;
+    font-weight: 500;
+    flex: 1;
+    color: var(--text);
+  }
+
+  .filter-group {
+    display: flex;
+    gap: 6px;
+  }
+
+  .filter-chip {
+    padding: 5px 11px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: none;
+    color: var(--text2);
+    font-size: 12px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .filter-chip:hover { border-color: var(--border2); color: var(--text); }
+  .filter-chip.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+
+  /* Stats */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stat-cell {
+    background: var(--surface);
+    padding: 14px 20px;
+  }
+
+  .stat-label { font-size: 11px; color: var(--text3); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+  .stat-value { font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 500; color: var(--text); }
+  .stat-value.accent { color: var(--accent); }
+  .stat-value.alta { color: var(--alta); }
+
+  /* Content area */
+  .content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* Report list */
+  .report-list {
+    width: 400px;
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    flex-shrink: 0;
+  }
+
+  .report-list::-webkit-scrollbar { width: 4px; }
+  .report-list::-webkit-scrollbar-track { background: transparent; }
+  .report-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  .list-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 1;
+  }
+
+  .report-card {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.1s;
+    position: relative;
+  }
+
+  .report-card:hover { background: var(--surface); }
+  .report-card.selected { background: var(--surface2); border-left: 2px solid var(--accent); }
+
+  .report-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .pill {
+    font-size: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  .pill-alta { background: var(--alta-bg); color: var(--alta); }
+  .pill-media { background: var(--media-bg); color: var(--media); }
+  .pill-baja { background: var(--baja-bg); color: var(--baja); }
+
+  .pill-bug { background: var(--bug-bg); color: var(--bug); }
+  .pill-incidente { background: var(--incidente-bg); color: var(--incidente); }
+  .pill-tarea { background: var(--tarea-bg); color: var(--tarea); }
+  .pill-otro { background: var(--otro-bg); color: var(--otro); }
+
+  .pill-nuevo      { background: #2563eb; color: #fff; }
+  .pill-visto       { background: #0891b2; color: #fff; }
+  .pill-en_revision { background: #7c3aed; color: #fff; }
+  .pill-en_proceso  { background: #ea580c; color: #fff; }
+  .pill-resuelto   { background: #dc2626; color: #000; }
+
+  .report-card-time { font-size: 11px; color: var(--text3); margin-left: auto; font-family: 'IBM Plex Mono', monospace; }
+
+  .report-card-summary { font-size: 13px; color: var(--text); line-height: 1.4; margin-bottom: 6px; }
+  .report-card-user { font-size: 11px; color: var(--text3); }
+
+  .unread-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /* Detail panel */
+  .detail-panel {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .detail-panel::-webkit-scrollbar { width: 4px; }
+  .detail-panel::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  .empty-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--text3);
+  }
+
+  .empty-icon { font-size: 40px; opacity: 0.3; }
+  .empty-state p { font-size: 13px; }
+
+  .detail-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    justify-content: space-between;
+  }
+
+  .detail-title { font-size: 16px; font-weight: 500; color: var(--text); line-height: 1.4; flex: 1; }
+
+  .detail-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .section-title {
+    padding: 10px 14px;
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .section-body { padding: 14px; }
+
+  .raw-msg {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .key-points { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+  .key-point {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .kp-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+
+  .lf-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .lf-field { display: flex; flex-direction: column; gap: 2px; }
+  .lf-label { font-size: 10px; color: var(--text3); letter-spacing: 0.06em; text-transform: uppercase; }
+  .lf-value { font-size: 12px; color: var(--text); font-family: 'IBM Plex Mono', monospace; word-break: break-all; }
+
+  .status-actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .status-btn-group {
+    display: inline-flex;
+    border-radius: 5px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: opacity 0.15s, border-color 0.15s;
+    opacity: 0.45;
+  }
+
+  .status-btn-group:hover { opacity: 0.75; }
+  .status-btn-group.current { opacity: 1; border-color: rgba(255,255,255,0.45); }
+
+  .status-btn {
+    padding: 6px 13px;
+    border: none;
+    font-size: 12px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    cursor: pointer;
+  }
+
+  .status-notify {
+    padding: 6px 8px;
+    border: none;
+    border-left: 1px solid rgba(255,255,255,0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background 0.12s;
+  }
+
+  .status-notify:hover { background: rgba(255,255,255,0.15); }
+
+  .status-btn-nuevo       { background: #2563eb; color: #fff; }
+  .status-btn-visto       { background: #0891b2; color: #fff; }
+  .status-btn-en_revision { background: #7c3aed; color: #fff; }
+  .status-btn-en_proceso  { background: #ea580c; color: #fff; }
+  .status-btn-resuelto    { background: #dc2626; color: #000; }
+
+  .notes-area {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    padding: 10px 12px;
+    resize: vertical;
+    min-height: 80px;
+    outline: none;
+    line-height: 1.6;
+  }
+
+  .notes-area:focus { border-color: var(--accent); }
+
+  .save-btn {
+    padding: 6px 16px;
+    border-radius: 5px;
+    background: var(--accent);
+    border: none;
+    color: white;
+    font-size: 12px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    cursor: pointer;
+    opacity: 0.9;
+    transition: opacity 0.15s;
+  }
+
+  .save-btn:hover { opacity: 1; }
+
+  .notify-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 5px;
+    border: 1px solid var(--border2);
+    background: none;
+    color: var(--text2);
+    font-size: 12px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .notify-btn:hover { background: var(--surface2); color: var(--text); }
+  .notify-btn:disabled { opacity: 0.5; cursor: default; }
+
+  .ts-label {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .no-reports {
+    padding: 32px 16px;
+    text-align: center;
+    color: var(--text3);
+    font-size: 13px;
+  }
+
+  .spinning { animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Login modal ── */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(9,20,19,0.85);
+    backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100;
+  }
+
+  .modal-overlay.hidden { display: none; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 32px;
+    width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .modal-logo {
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .modal-logo-icon {
+    width: 32px; height: 32px;
+    background: #285A48;
+    border: 1px solid rgba(77,184,130,0.3);
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .modal-logo-icon svg { width: 17px; height: 17px; fill: white; }
+
+  .modal h2 {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .modal p {
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: -12px;
+  }
+
+  .modal-field {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .modal-field input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    padding: 9px 12px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .modal-field input::placeholder { color: var(--text3); }
+  .modal-field input:focus { border-color: var(--accent); }
+
+  .modal-submit {
+    padding: 9px;
+    border-radius: 6px;
+    background: var(--accent);
+    border: none;
+    color: white;
+    font-size: 13px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .modal-submit:hover { opacity: 0.85; }
+  .modal-submit:disabled { opacity: 0.5; cursor: default; }
+
+  .modal-error {
+    font-size: 12px;
+    color: #ff6b6b;
+    display: none;
+  }
+
+  /* ── Sesión en sidebar ── */
+  .session-info {
+    margin-top: auto;
+    padding: 10px 8px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .session-profile {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+
+  .session-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--border2);
+    flex-shrink: 0;
+  }
+
+  .session-avatar-placeholder {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: var(--text2);
+    flex-shrink: 0;
+  }
+
+  .session-name {
+    font-size: 12px;
+    color: var(--text);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .session-status {
+    font-size: 10px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .session-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div>
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 16 16"><path d="M8 1L1 4v4c0 4 3 6.5 7 7.5 4-1 7-3.5 7-7.5V4L8 1z"/></svg>
+      </div>
+      <div>
+        <div class="logo-text">reports</div>
+        <div class="logo-sub">clave10</div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="nav-section">
+    <label>Bandeja</label>
+    <button class="nav-item active" onclick="filterStatus(null, this)">
+      <span class="nav-dot" style="background:var(--accent)"></span>
+      Todos
+      <span class="badge" id="badge-total">—</span>
+    </button>
+    <button class="nav-item" onclick="filterStatus('nuevo', this)">
+      <span class="nav-dot" style="background:var(--nuevo)"></span>
+      Nuevos
+      <span class="badge" id="badge-nuevo">—</span>
+    </button>
+    <button class="nav-item" onclick="filterStatus('en_proceso', this)">
+      <span class="nav-dot" style="background:var(--en_proceso)"></span>
+      En proceso
+      <span class="badge" id="badge-en_proceso">—</span>
+    </button>
+    <button class="nav-item" onclick="filterStatus('resuelto', this)">
+      <span class="nav-dot" style="background:var(--resuelto)"></span>
+      Resueltos
+      <span class="badge" id="badge-resuelto">—</span>
+    </button>
+    <button class="nav-item" onclick="filterStatus('visto', this)">
+      <span class="nav-dot" style="background:var(--visto)"></span>
+      Vistos
+      <span class="badge" id="badge-visto">—</span>
+    </button>
+    <button class="nav-item" onclick="filterStatus('en_revision', this)">
+      <span class="nav-dot" style="background:var(--en_revision)"></span>
+      En revisión
+      <span class="badge" id="badge-en_revision">—</span>
+    </button>
+  </nav>
+
+  <div class="session-info" id="session-info" style="display:none">
+    <div class="session-profile">
+      <div id="session-avatar-wrap"></div>
+      <div>
+        <div class="session-name" id="session-user-label">—</div>
+        <div class="session-status"><span class="session-dot"></span>Conectado</div>
+      </div>
+    </div>
+    <button class="sync-btn" style="margin-top:0" onclick="logout()">Cerrar sesión</button>
+  </div>
+
+  <button class="sync-btn" onclick="syncNow()">
+    <svg id="sync-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+    Sincronizar
+  </button>
+</aside>
+
+<!-- Main -->
+<main class="main">
+  <div class="topbar">
+    <h1 id="topbar-title">Todos los reportes</h1>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat-cell">
+      <div class="stat-label">Total</div>
+      <div class="stat-value accent" id="stat-total">—</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">Nuevos</div>
+      <div class="stat-value" id="stat-nuevos">—</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">En proceso</div>
+      <div class="stat-value" id="stat-proceso">—</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">Resueltos</div>
+      <div class="stat-value" id="stat-resueltos">—</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Lista -->
+    <div class="report-list">
+      <div class="list-header">
+        <span id="list-count">cargando...</span>
+        <span id="list-filter-label"></span>
+      </div>
+      <div id="report-items"></div>
+    </div>
+
+    <!-- Detalle -->
+    <div class="detail-panel" id="detail-panel">
+      <div class="empty-state">
+        <div class="empty-icon">⌗</div>
+        <p>Selecciona un reporte para ver el detalle</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Modal de login -->
+<div class="modal-overlay hidden" id="login-modal">
+  <div class="modal">
+    <div class="modal-logo">
+      <div class="modal-logo-icon">
+        <svg viewBox="0 0 16 16"><path d="M8 1L1 4v4c0 4 3 6.5 7 7.5 4-1 7-3.5 7-7.5V4L8 1z"/></svg>
+      </div>
+      <div>
+        <div class="logo-text">reports · clave10</div>
+        <div class="logo-sub">linkaform</div>
+      </div>
+    </div>
+
+    <div>
+      <h2>Iniciar sesión</h2>
+      <p>Ingresa tus credenciales de Linkaform</p>
+    </div>
+
+    <div class="modal-field">
+      <input type="text" id="lf-username" placeholder="Usuario o correo" autocomplete="username" />
+      <input type="password" id="lf-password" placeholder="Contraseña" autocomplete="current-password" />
+    </div>
+
+    <div class="modal-error" id="login-error"></div>
+
+    <button class="modal-submit" id="login-submit" onclick="doLogin()">Entrar</button>
+  </div>
+</div>
+
+<script>
+let allReports = [];
+let selectedId = null;
+let currentStatusFilter = null;
+
+const API = '';
+
+async function loadStats() {
+  try {
+    const res = await fetch(`${API}/api/stats`);
+    const s = await res.json();
+    document.getElementById('stat-total').textContent = s.total;
+    document.getElementById('stat-nuevos').textContent = s.nuevos;
+    document.getElementById('stat-proceso').textContent = s.en_proceso;
+    document.getElementById('stat-resueltos').textContent = s.resueltos;
+
+    document.getElementById('badge-total').textContent = s.total;
+    document.getElementById('badge-nuevo').textContent = s.nuevos;
+    document.getElementById('badge-en_proceso').textContent = s.en_proceso;
+    document.getElementById('badge-resuelto').textContent = s.resueltos;
+    document.getElementById('badge-visto').textContent = s.vistos || 0;
+    document.getElementById('badge-en_revision').textContent = s.en_revision || 0;
+  } catch(e) {}
+}
+
+async function loadReports() {
+  let url = `${API}/api/reports?limit=200`;
+  if (currentStatusFilter) url += `&status=${currentStatusFilter}`;
+
+  try {
+    const res = await fetch(url);
+    allReports = await res.json();
+    // En "Todos" no mostrar resueltos
+    if (!currentStatusFilter) {
+      allReports = allReports.filter(r => r.status !== 'resuelto');
+    }
+  } catch(e) {
+    allReports = [];
+  }
+
+  renderList();
+}
+
+function renderList() {
+  const container = document.getElementById('report-items');
+  document.getElementById('list-count').textContent = `${allReports.length} reportes`;
+
+  if (!allReports.length) {
+    container.innerHTML = '<div class="no-reports">Sin reportes con estos filtros</div>';
+    return;
+  }
+
+  container.innerHTML = allReports.map(r => {
+    const isNew = r.status === 'nuevo';
+    const date = r.created_at ? new Date(r.created_at * 1000) : null;
+    const timeStr = date ? formatTime(date) : '';
+    return `
+      <div class="report-card ${r.id === selectedId ? 'selected' : ''}"
+           onclick="selectReport('${r.id}')">
+        <div class="report-card-header">
+          <span class="pill pill-${r.status}">${r.status || 'nuevo'}</span>
+          <span class="report-card-time">${timeStr}</span>
+        </div>
+        <div class="report-card-summary">${escHtml(r.summary || r.raw_message?.substring(0, 100) || '')}</div>
+        <div class="report-card-user">@${escHtml(r.slack_user_name || r.slack_user || '?')} · #${escHtml(r.slack_channel || '')}</div>
+        ${isNew ? '<div class="unread-dot"></div>' : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+async function selectReport(id) {
+  selectedId = id;
+  renderList();
+
+  const report = allReports.find(r => r.id === id);
+  if (!report) return;
+
+  const panel = document.getElementById('detail-panel');
+  const date = report.created_at ? new Date(report.created_at * 1000).toLocaleString('es-MX') : '';
+
+  panel.innerHTML = `
+    <div class="detail-header">
+      <div class="detail-title">${escHtml(report.summary || 'Sin título')}</div>
+    </div>
+
+    <div class="detail-meta">
+      <span class="pill pill-${report.status}">${report.status || 'nuevo'}</span>
+      <span class="ts-label">${date}</span>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Mensaje · @${escHtml(report.slack_user_name || report.slack_user || '?')}</div>
+      <div class="section-body">
+        <div class="raw-msg">${escHtml(report.raw_message || '')}</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Estado</div>
+      <div class="section-body" style="display:flex;flex-direction:column;gap:12px">
+        <div class="status-actions">
+          ${['nuevo','visto','en_revision','en_proceso','resuelto'].map(s => {
+            const isCurrent = report.status === s;
+            const notifyIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`;
+            const notifyBtn = s !== 'nuevo'
+              ? `<button class="status-notify status-btn-${s}" onclick="notifySlack('${id}','${s}')" title="Notificar en Slack">${notifyIcon}</button>`
+              : '';
+            return `
+              <div class="status-btn-group ${isCurrent ? 'current' : ''}">
+                <button class="status-btn status-btn-${s}" onclick="updateStatus('${id}','${s}')">${s.replace(/_/g,' ')}</button>
+                ${notifyBtn}
+              </div>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Notas</div>
+      <div class="section-body" style="display:flex;flex-direction:column;gap:8px">
+        <textarea class="notes-area" id="notes-area" placeholder="Agrega notas sobre este reporte...">${escHtml(report.notes || '')}</textarea>
+        <div><button class="save-btn" onclick="saveNotes('${id}')">Guardar notas</button></div>
+      </div>
+    </div>
+  `;
+}
+
+function renderLfFields(obj, prefix = '') {
+  const ignore = ['answers'];
+  return Object.entries(obj)
+    .filter(([k]) => !ignore.includes(k) && typeof obj[k] !== 'object')
+    .slice(0, 12)
+    .map(([k, v]) => `
+      <div class="lf-field">
+        <span class="lf-label">${escHtml(k)}</span>
+        <span class="lf-value">${escHtml(String(v).substring(0, 80))}</span>
+      </div>
+    `).join('');
+}
+
+async function updateStatus(id, status) {
+  await fetch(`${API}/api/reports/${encodeURIComponent(id)}/status`, {
+    method: 'PATCH',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ status })
+  });
+  const r = allReports.find(r => r.id === id);
+  if (r) r.status = status;
+  selectReport(id);
+  renderList();
+  loadStats();
+}
+
+async function notifySlack(id, status) {
+  const btn = event.currentTarget;
+  const original = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '···';
+
+  try {
+    const res = await fetch(`${API}/api/reports/${encodeURIComponent(id)}/notify`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status }),
+    });
+    const data = await res.json();
+    btn.innerHTML = data.ok ? '✓' : '✗';
+    setTimeout(() => { btn.innerHTML = original; btn.disabled = false; }, 2000);
+  } catch(e) {
+    btn.innerHTML = '✗';
+    setTimeout(() => { btn.innerHTML = original; btn.disabled = false; }, 2000);
+  }
+}
+
+async function saveNotes(id) {
+  const notes = document.getElementById('notes-area')?.value || '';
+  await fetch(`${API}/api/reports/${encodeURIComponent(id)}/notes`, {
+    method: 'PATCH',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ notes })
+  });
+  const r = allReports.find(r => r.id === id);
+  if (r) r.notes = notes;
+  const btn = document.querySelector('.save-btn');
+  if (btn) { btn.textContent = '✓ Guardado'; setTimeout(() => btn.textContent = 'Guardar notas', 1500); }
+}
+
+function filterStatus(status, el) {
+  currentStatusFilter = status;
+  document.querySelectorAll('.sidebar .nav-item').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  const labels = { nuevo: 'Nuevos', visto: 'Vistos', en_revision: 'En revisión', en_proceso: 'En proceso', resuelto: 'Resueltos' };
+  document.getElementById('topbar-title').textContent = status ? (labels[status] || 'Reportes') : 'Todos los reportes';
+  loadReports();
+}
+
+async function syncNow() {
+  const icon = document.getElementById('sync-icon');
+  const btn  = document.querySelector('.sync-btn');
+
+  // Evitar doble click
+  if (btn.disabled) return;
+  btn.disabled = true;
+  icon.classList.add('spinning');
+
+  try {
+    const res = await fetch(`${API}/api/sync`, { method: 'POST' });
+    if (res.status === 409) {
+      // Ya hay un sync en curso, solo esperar
+    } else if (!res.ok) {
+      throw new Error('Error al iniciar sync');
+    }
+
+    // Polling hasta que termine
+    await waitForSync();
+    await loadStats();
+    await loadReports();
+  } catch(e) {
+    console.error('Sync error:', e);
+  } finally {
+    icon.classList.remove('spinning');
+    btn.disabled = false;
+  }
+}
+
+async function waitForSync() {
+  while (true) {
+    await new Promise(r => setTimeout(r, 1500));
+    try {
+      const res = await fetch(`${API}/api/sync/status`);
+      const { running } = await res.json();
+      if (!running) break;
+    } catch(e) { break; }
+  }
+}
+
+function formatTime(date) {
+  const now = new Date();
+  const diff = (now - date) / 1000;
+  if (diff < 60) return 'ahora';
+  if (diff < 3600) return `${Math.floor(diff/60)}m`;
+  if (diff < 86400) return `${Math.floor(diff/3600)}h`;
+  return `${Math.floor(diff/86400)}d`;
+}
+
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+// ── Auth ──────────────────────────────────────────────────────────────────────
+
+async function checkAuth() {
+  try {
+    const res  = await fetch(`${API}/api/auth/status`);
+    const data = await res.json();
+    if (data.logged_in) {
+      showApp(data.user, data.avatar);
+    } else {
+      showLogin();
+    }
+  } catch(e) {
+    showLogin();
+  }
+}
+
+function showLogin() {
+  document.getElementById('login-modal').classList.remove('hidden');
+  document.getElementById('lf-username').focus();
+}
+
+function showApp(user, avatar) {
+  document.getElementById('login-modal').classList.add('hidden');
+  document.getElementById('session-info').style.display = 'flex';
+  document.getElementById('session-user-label').textContent = user || '—';
+
+  const wrap = document.getElementById('session-avatar-wrap');
+  const initials = (user || '?').charAt(0).toUpperCase();
+  if (avatar) {
+    wrap.innerHTML = `<img class="session-avatar" src="${avatar}" alt="${escHtml(user)}"
+      onerror="this.parentElement.innerHTML='<div class=\\'session-avatar-placeholder\\'>${initials}</div>'">`;
+  } else {
+    wrap.innerHTML = `<div class="session-avatar-placeholder">${initials}</div>`;
+  }
+
+  loadStats();
+  loadReports();
+  setInterval(() => { loadStats(); loadReports(); }, 60000);
+}
+
+async function doLogin() {
+  const username = document.getElementById('lf-username').value.trim();
+  const password = document.getElementById('lf-password').value.trim();
+  const errEl    = document.getElementById('login-error');
+  const btn      = document.getElementById('login-submit');
+
+  errEl.style.display = 'none';
+  btn.disabled = true;
+  btn.textContent = 'Entrando...';
+
+  try {
+    const res  = await fetch(`${API}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    });
+    const data = await res.json();
+
+    if (data.ok) {
+      showApp(data.user, data.avatar);
+    } else {
+      errEl.textContent = data.error || 'Error al iniciar sesión';
+      errEl.style.display = 'block';
+    }
+  } catch(e) {
+    errEl.textContent = 'Error de conexión';
+    errEl.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Entrar';
+  }
+}
+
+async function logout() {
+  await fetch(`${API}/api/auth/logout`, { method: 'POST' });
+  document.getElementById('session-info').style.display = 'none';
+  showLogin();
+}
+
+// Enter en los inputs del login
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !document.getElementById('login-modal').classList.contains('hidden')) {
+    doLogin();
+  }
+});
+
+// Init
+checkAuth();
+</script>
+</body>
+</html>

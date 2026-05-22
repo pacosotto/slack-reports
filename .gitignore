@@ -1,0 +1,6 @@
+.env
+reports.db
+sync.log
+venv/
+__pycache__/
+*.pyc
