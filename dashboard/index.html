@@ -537,6 +537,112 @@
   .spinning { animation: spin 1s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  .resolution-time-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    padding: 7px 10px;
+    outline: none;
+    width: 80px;
+    transition: border-color 0.15s;
+  }
+  .resolution-time-input:focus { border-color: var(--accent); }
+
+  .resolution-time-unit {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    padding: 7px 10px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  /* ── Task status / type pills ── */
+  .pill-pendiente    { background: var(--nuevo-bg); color: #60a5fa; }
+  .pill-completada   { background: rgba(34,197,94,0.15); color: #22c55e; }
+
+  .pill-type-reporte { background: rgba(8,145,178,0.15); color: #38bdf8; font-weight: 500; }
+  .pill-type-tarea   { background: rgba(168,85,247,0.15); color: #a855f7; font-weight: 500; }
+  .pill-config       { background: rgba(168,85,247,0.15); color: #a855f7; }
+  .pill-revisión     { background: rgba(20,184,166,0.15); color: #14b8a6; }
+  .pill-investigación{ background: rgba(245,158,11,0.15); color: #f59e0b; }
+
+  .status-btn-completada { background: #16a34a; color: #fff; }
+  .status-btn-pendiente  { background: #2563eb; color: #fff; }
+
+  /* ── Nueva tarea form ── */
+  .new-task-panel {
+    max-width: 560px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .new-task-panel h2 {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .new-task-panel p {
+    font-size: 12px;
+    color: var(--text3);
+    line-height: 1.6;
+    margin-top: -8px;
+  }
+
+  .creating-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text3);
+  }
+
+  .est-big {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 26px;
+    font-weight: 500;
+    color: var(--accent);
+  }
+
+  .est-real {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 26px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .delete-btn {
+    padding: 5px 12px;
+    border-radius: 5px;
+    border: 1px solid rgba(255,107,107,0.25);
+    background: none;
+    color: var(--alta);
+    font-size: 11px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    cursor: pointer;
+    opacity: 0.55;
+    transition: all 0.15s;
+  }
+  .delete-btn:hover { opacity: 1; background: var(--alta-bg); border-color: rgba(255,107,107,0.5); }
+
+  .res-time-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: rgba(77,184,130,0.12);
+    color: var(--accent);
+    margin-left: 4px;
+  }
+
   /* ── Login modal ── */
   .modal-overlay {
     position: fixed; inset: 0;
@@ -685,6 +791,154 @@
     border-radius: 50%;
     background: var(--accent);
   }
+
+  /* ── Cuentas widget ── */
+  .accounts-bar {
+    padding: 9px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    flex-shrink: 0;
+  }
+
+  .accounts-bar::-webkit-scrollbar { height: 3px; }
+  .accounts-bar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  .accounts-label {
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .account-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px 4px 5px;
+    border-radius: 20px;
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    color: var(--text2);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+
+  .account-chip:hover { background: var(--surface2); color: var(--text); }
+  .account-chip.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+  .account-avatar {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .account-username {
+    font-size: 10px;
+    opacity: 0.65;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .add-account-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px dashed var(--border2);
+    background: none;
+    color: var(--text3);
+    font-size: 11px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .add-account-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .account-select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text2);
+    font-size: 11px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    padding: 3px 8px;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+
+  .account-select:focus { border-color: var(--accent); }
+
+  /* ── Barra de acciones (debajo de stats) ── */
+  .actions-bar {
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    background: var(--surface);
+  }
+
+  .actions-sep {
+    width: 1px;
+    height: 20px;
+    background: var(--border2);
+    flex-shrink: 0;
+  }
+
+  /* ── Buscador de fecha ── */
+  .date-filter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .date-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 5px 8px;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    color-scheme: dark;
+  }
+
+  .date-input:focus { border-color: var(--accent); }
+
+  .date-sep { font-size: 11px; color: var(--text3); }
+
+  .completed-badge {
+    font-size: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    padding: 2px 7px;
+    border-radius: 3px;
+    background: rgba(77,184,130,0.15);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
 </style>
 </head>
 <body>
@@ -760,6 +1014,13 @@
     <h1 id="topbar-title">Todos los reportes</h1>
   </div>
 
+  <!-- Cuentas en producción -->
+  <div class="accounts-bar" id="accounts-bar">
+    <span class="accounts-label">Producción</span>
+    <div id="account-chips" style="display:flex;gap:6px;align-items:center;flex:1"></div>
+    <button class="add-account-btn" onclick="showNewAccountForm()">+ Cuenta</button>
+  </div>
+
   <!-- Stats -->
   <div class="stats-bar">
     <div class="stat-cell">
@@ -767,17 +1028,30 @@
       <div class="stat-value accent" id="stat-total">—</div>
     </div>
     <div class="stat-cell">
-      <div class="stat-label">Nuevos</div>
+      <div class="stat-label" id="stat-label-nuevos">Nuevos</div>
       <div class="stat-value" id="stat-nuevos">—</div>
     </div>
     <div class="stat-cell">
-      <div class="stat-label">En proceso</div>
+      <div class="stat-label" id="stat-label-proceso">En proceso</div>
       <div class="stat-value" id="stat-proceso">—</div>
     </div>
     <div class="stat-cell">
-      <div class="stat-label">Resueltos</div>
+      <div class="stat-label" id="stat-label-resueltos">Resueltos</div>
       <div class="stat-value" id="stat-resueltos">—</div>
     </div>
+  </div>
+
+  <!-- Acciones -->
+  <div class="actions-bar">
+    <div class="date-filter">
+      <span class="date-sep" style="font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3)">Fecha</span>
+      <input type="date" id="date-from" class="date-input" title="Desde" onchange="applyDateFilter()">
+      <span class="date-sep">—</span>
+      <input type="date" id="date-to" class="date-input" title="Hasta" onchange="applyDateFilter()">
+      <button class="filter-chip" id="date-clear-btn" onclick="clearDateFilter()" style="display:none">✕</button>
+    </div>
+    <div class="actions-sep"></div>
+    <button class="notify-btn" onclick="showNewTaskForm()">+ Nueva tarea</button>
   </div>
 
   <div class="content">
@@ -830,78 +1104,157 @@
 </div>
 
 <script>
+let allItems = [];
 let allReports = [];
+let allTasks = [];
+let allAccounts = [];
 let selectedId = null;
+let selectedTaskId = null;
+let selectedAccountId = null;
 let currentStatusFilter = null;
+let dateFrom = null;
+let dateTo = null;
+let accountFilter = null;
 
 const API = '';
 
 async function loadStats() {
   try {
-    const res = await fetch(`${API}/api/stats`);
-    const s = await res.json();
-    document.getElementById('stat-total').textContent = s.total;
-    document.getElementById('stat-nuevos').textContent = s.nuevos;
-    document.getElementById('stat-proceso').textContent = s.en_proceso;
-    document.getElementById('stat-resueltos').textContent = s.resueltos;
+    const [repRes, taskRes] = await Promise.all([
+      fetch(`${API}/api/stats`),
+      fetch(`${API}/api/tasks/stats`)
+    ]);
+    const s = await repRes.json();
+    const t = await taskRes.json();
 
-    document.getElementById('badge-total').textContent = s.total;
-    document.getElementById('badge-nuevo').textContent = s.nuevos;
-    document.getElementById('badge-en_proceso').textContent = s.en_proceso;
-    document.getElementById('badge-resuelto').textContent = s.resueltos;
-    document.getElementById('badge-visto').textContent = s.vistos || 0;
+    document.getElementById('badge-total').textContent    = (s.total - s.resueltos) + (t.total - t.completadas);
+    document.getElementById('badge-nuevo').textContent    = (s.nuevos || 0) + (t.pendientes || 0);
+    document.getElementById('badge-en_proceso').textContent = (s.en_proceso || 0) + (t.en_proceso || 0);
+    document.getElementById('badge-resuelto').textContent = (s.resueltos || 0) + (t.completadas || 0);
+    document.getElementById('badge-visto').textContent    = s.vistos || 0;
     document.getElementById('badge-en_revision').textContent = s.en_revision || 0;
+
+    document.getElementById('stat-total').textContent    = (s.total || 0) + (t.total || 0);
+    document.getElementById('stat-nuevos').textContent   = (s.nuevos || 0) + (t.pendientes || 0);
+    document.getElementById('stat-proceso').textContent  = (s.en_proceso || 0) + (t.en_proceso || 0);
+    document.getElementById('stat-resueltos').textContent = (s.resueltos || 0) + (t.completadas || 0);
   } catch(e) {}
 }
 
-async function loadReports() {
-  let url = `${API}/api/reports?limit=200`;
-  if (currentStatusFilter) url += `&status=${currentStatusFilter}`;
-
+async function loadItems() {
   try {
-    const res = await fetch(url);
-    allReports = await res.json();
-    // En "Todos" no mostrar resueltos
-    if (!currentStatusFilter) {
-      allReports = allReports.filter(r => r.status !== 'resuelto');
-    }
-  } catch(e) {
-    allReports = [];
-  }
+    const [repRes, taskRes] = await Promise.all([
+      fetch(`${API}/api/reports?limit=200`),
+      fetch(`${API}/api/tasks`)
+    ]);
+    const reports = (await repRes.json()).map(r => ({ ...r, item_type: 'reporte' }));
+    const tasks   = (await taskRes.json()).map(t => ({ ...t, item_type: 'tarea'   }));
 
+    allReports = reports;
+    allTasks   = tasks;
+
+    let fr, ft;
+    if (!currentStatusFilter) {
+      fr = reports.filter(r => r.status !== 'resuelto');
+      ft = tasks.filter(t => t.status !== 'completada');
+    } else if (currentStatusFilter === 'resuelto') {
+      fr = reports.filter(r => r.status === 'resuelto');
+      ft = tasks.filter(t => t.status === 'completada');
+    } else if (currentStatusFilter === 'nuevo') {
+      fr = reports.filter(r => r.status === 'nuevo');
+      ft = tasks.filter(t => t.status === 'pendiente');
+    } else {
+      fr = reports.filter(r => r.status === currentStatusFilter);
+      ft = currentStatusFilter === 'en_proceso' ? tasks.filter(t => t.status === 'en_proceso') : [];
+    }
+
+    allItems = [...fr, ...ft].sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
+  } catch(e) {
+    allItems = []; allReports = []; allTasks = [];
+  }
   renderList();
 }
 
 function renderList() {
   const container = document.getElementById('report-items');
-  document.getElementById('list-count').textContent = `${allReports.length} reportes`;
 
-  if (!allReports.length) {
-    container.innerHTML = '<div class="no-reports">Sin reportes con estos filtros</div>';
+  let displayItems = allItems;
+  if (dateFrom || dateTo) {
+    const fromTs = dateFrom ? new Date(dateFrom + 'T00:00:00').getTime() / 1000 : 0;
+    const toTs   = dateTo   ? new Date(dateTo   + 'T23:59:59').getTime() / 1000 : Infinity;
+    displayItems = displayItems.filter(item => {
+      const ts = item.created_at || 0;
+      return ts >= fromTs && ts <= toTs;
+    });
+  }
+  if (accountFilter) {
+    displayItems = displayItems.filter(item => item.account_id === accountFilter);
+  }
+
+  const nr = displayItems.filter(i => i.item_type === 'reporte').length;
+  const nt = displayItems.filter(i => i.item_type === 'tarea').length;
+  const parts = [];
+  if (nr) parts.push(`${nr} reporte${nr !== 1 ? 's' : ''}`);
+  if (nt) parts.push(`${nt} tarea${nt !== 1 ? 's' : ''}`);
+  document.getElementById('list-count').textContent = parts.join(' · ') || 'Sin elementos';
+
+  if (!displayItems.length) {
+    container.innerHTML = '<div class="no-reports">Sin elementos con estos filtros</div>';
     return;
   }
 
-  container.innerHTML = allReports.map(r => {
-    const isNew = r.status === 'nuevo';
-    const date = r.created_at ? new Date(r.created_at * 1000) : null;
+  container.innerHTML = displayItems.map(item => {
+    const isReport = item.item_type === 'reporte';
+    const id = item.id;
+    const isSelected = isReport ? id === selectedId : id === selectedTaskId;
+    const date = item.created_at ? new Date(item.created_at * 1000) : null;
     const timeStr = date ? formatTime(date) : '';
-    return `
-      <div class="report-card ${r.id === selectedId ? 'selected' : ''}"
-           onclick="selectReport('${r.id}')">
-        <div class="report-card-header">
-          <span class="pill pill-${r.status}">${r.status || 'nuevo'}</span>
-          <span class="report-card-time">${timeStr}</span>
-        </div>
-        <div class="report-card-summary">${escHtml(r.summary || r.raw_message?.substring(0, 100) || '')}</div>
-        <div class="report-card-user">@${escHtml(r.slack_user_name || r.slack_user || '?')} · #${escHtml(r.slack_channel || '')}</div>
-        ${isNew ? '<div class="unread-dot"></div>' : ''}
-      </div>
-    `;
+
+    if (isReport) {
+      const isNew = item.status === 'nuevo';
+      const resMin = item.resolution_time_minutes;
+      const resLabel = (item.status === 'resuelto' && resMin)
+        ? `<span class="res-time-badge">⏱ ${fmtResTime(resMin)}</span>` : '';
+      const completedStr = item.completed_at
+        ? new Date(item.completed_at * 1000).toLocaleDateString('es-MX', { day:'2-digit', month:'short', year:'numeric' })
+        : '';
+      const completedLabel = completedStr
+        ? `<span style="font-size:10px;color:var(--accent);font-family:'IBM Plex Mono',monospace;margin-left:4px">✓ ${completedStr}</span>` : '';
+      return `
+        <div class="report-card ${isSelected ? 'selected' : ''}" onclick="selectReport('${id}')">
+          <div class="report-card-header">
+            <span class="pill pill-type-reporte">reporte</span>
+            <span class="pill pill-${item.status}">${item.status || 'nuevo'}</span>
+            <span class="report-card-time">${timeStr}</span>
+          </div>
+          <div class="report-card-summary">${escHtml(item.summary || item.raw_message?.substring(0, 100) || '')}</div>
+          <div class="report-card-user">@${escHtml(item.slack_user_name || item.slack_user || '?')} · #${escHtml(item.slack_channel || '')}${resLabel}${completedLabel}</div>
+          ${isNew ? '<div class="unread-dot"></div>' : ''}
+        </div>`;
+    } else {
+      const est = item.estimated_minutes ? `<span class="res-time-badge">~${fmtResTime(item.estimated_minutes)}</span>` : '';
+      const completedStr = item.completed_at
+        ? new Date(item.completed_at * 1000).toLocaleDateString('es-MX', { day:'2-digit', month:'short', year:'numeric' })
+        : '';
+      const completedLabel = completedStr
+        ? `<span style="font-size:10px;color:var(--accent);font-family:'IBM Plex Mono',monospace;margin-left:4px">✓ ${completedStr}</span>` : '';
+      return `
+        <div class="report-card ${isSelected ? 'selected' : ''}" onclick="selectTask('${id}')">
+          <div class="report-card-header">
+            <span class="pill pill-type-tarea">tarea</span>
+            <span class="pill pill-${item.status || 'pendiente'}">${item.status || 'pendiente'}</span>
+            <span class="report-card-time">${timeStr}</span>
+          </div>
+          <div class="report-card-summary">${escHtml(item.title || '')}</div>
+          <div class="report-card-user">${est}${completedLabel} <span style="opacity:0.7">${escHtml((item.description || '').substring(0, 55))}${(item.description || '').length > 55 ? '…' : ''}</span></div>
+        </div>`;
+    }
   }).join('');
 }
 
 async function selectReport(id) {
   selectedId = id;
+  selectedTaskId = null;
   renderList();
 
   const report = allReports.find(r => r.id === id);
@@ -909,6 +1262,16 @@ async function selectReport(id) {
 
   const panel = document.getElementById('detail-panel');
   const date = report.created_at ? new Date(report.created_at * 1000).toLocaleString('es-MX') : '';
+  const completedDate = report.completed_at ? new Date(report.completed_at * 1000).toLocaleString('es-MX') : '';
+
+  // Pre-cálculo para el formulario de resolución
+  const _resTime = report.resolution_time_minutes;
+  let _resVal = '', _resUnit = 60;
+  if (_resTime) {
+    if (_resTime >= 60) { _resVal = (_resTime % 60 === 0) ? String(_resTime / 60) : (_resTime / 60).toFixed(1); }
+    else { _resVal = String(_resTime); _resUnit = 1; }
+  }
+  const _showRes = report.status === 'resuelto' || !!report.resolution_cause || !!_resTime;
 
   panel.innerHTML = `
     <div class="detail-header">
@@ -917,7 +1280,12 @@ async function selectReport(id) {
 
     <div class="detail-meta">
       <span class="pill pill-${report.status}">${report.status || 'nuevo'}</span>
-      <span class="ts-label">${date}</span>
+      <span class="ts-label" title="Fecha de creación del hilo">📅 ${date}</span>
+      ${completedDate ? `<span class="completed-badge" title="Fecha de resolución">✓ resuelto ${completedDate}</span>` : ''}
+      <select class="account-select" onchange="assignAccount('${id}','report',this.value)" title="Cuenta asociada">
+        <option value="">Sin cuenta</option>
+        ${allAccounts.map(a => `<option value="${a.id}" ${report.account_id === a.id ? 'selected' : ''}>${escHtml(a.name)}</option>`).join('')}
+      </select>
     </div>
 
     <div class="section">
@@ -931,7 +1299,7 @@ async function selectReport(id) {
       <div class="section-title">Estado</div>
       <div class="section-body" style="display:flex;flex-direction:column;gap:12px">
         <div class="status-actions">
-          ${['nuevo','visto','en_revision','en_proceso','resuelto'].map(s => {
+          ${['nuevo','visto','en_revision','en_proceso'].map(s => {
             const isCurrent = report.status === s;
             const notifyIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`;
             const notifyBtn = s !== 'nuevo'
@@ -943,6 +1311,24 @@ async function selectReport(id) {
                 ${notifyBtn}
               </div>`;
           }).join('')}
+          <div class="status-btn-group ${report.status === 'resuelto' ? 'current' : ''}">
+            <button class="status-btn status-btn-resuelto" onclick="toggleResolutionForm()">resuelto</button>
+            <button class="status-notify status-btn-resuelto" onclick="notifySlack('${id}','resuelto')" title="Notificar en Slack"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>
+          </div>
+        </div>
+
+        <div id="resolution-section" style="display:${_showRes ? 'flex' : 'none'};flex-direction:column;gap:10px;padding:12px;background:var(--surface2);border-radius:6px;border:1px solid var(--border)">
+          <div style="font-size:11px;color:var(--text3);letter-spacing:0.06em;text-transform:uppercase">Cierre del reporte</div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <span style="font-size:12px;color:var(--text2)">Tiempo empleado:</span>
+            <input type="number" id="res-time-value" class="resolution-time-input" placeholder="0" min="0" step="0.5" value="${_resVal}">
+            <select id="res-time-unit" class="resolution-time-unit">
+              <option value="60" ${_resUnit === 60 ? 'selected' : ''}>horas</option>
+              <option value="1" ${_resUnit === 1 ? 'selected' : ''}>minutos</option>
+            </select>
+          </div>
+          <textarea class="notes-area" id="res-cause" placeholder="Causa del problema y cómo se resolvió..." style="min-height:90px">${escHtml(report.resolution_cause || '')}</textarea>
+          <div><button class="save-btn" onclick="saveResolution('${id}')">Guardar y cerrar</button></div>
         </div>
       </div>
     </div>
@@ -954,7 +1340,23 @@ async function selectReport(id) {
         <div><button class="save-btn" onclick="saveNotes('${id}')">Guardar notas</button></div>
       </div>
     </div>
+
+    <div style="display:flex;justify-content:flex-end">
+      <button class="delete-btn" onclick="deleteReport('${id}')">Eliminar reporte</button>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        Hilo de Slack
+        <span id="thread-count" style="margin-left:auto;font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace"></span>
+      </div>
+      <div class="section-body" id="thread-body" style="display:flex;flex-direction:column;gap:0">
+        <div style="color:var(--text3);font-size:12px">Cargando...</div>
+      </div>
+    </div>
   `;
+
+  loadThread(id);
 }
 
 function renderLfFields(obj, prefix = '') {
@@ -977,7 +1379,7 @@ async function updateStatus(id, status) {
     body: JSON.stringify({ status })
   });
   const r = allReports.find(r => r.id === id);
-  if (r) r.status = status;
+  if (r) { r.status = status; const item = allItems.find(i => i.id === id); if (item) item.status = status; }
   selectReport(id);
   renderList();
   loadStats();
@@ -1017,13 +1419,335 @@ async function saveNotes(id) {
   if (btn) { btn.textContent = '✓ Guardado'; setTimeout(() => btn.textContent = 'Guardar notas', 1500); }
 }
 
+async function loadThread(id) {
+  const report = allReports.find(r => r.id === id);
+  if (!report) return;
+
+  if (report._thread !== undefined) {
+    renderThread(report._thread);
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/api/reports/${encodeURIComponent(id)}/thread`);
+    const data = await res.json();
+    report._thread = data.messages || [];
+    renderThread(report._thread);
+  } catch(e) {
+    const body = document.getElementById('thread-body');
+    if (body) body.innerHTML = '<div style="color:var(--text3);font-size:12px">Error al cargar el hilo</div>';
+  }
+}
+
+function renderThread(messages) {
+  const body = document.getElementById('thread-body');
+  const countEl = document.getElementById('thread-count');
+  if (!body) return;
+
+  if (countEl) countEl.textContent = messages.length
+    ? `${messages.length} respuesta${messages.length !== 1 ? 's' : ''}`
+    : '';
+
+  if (!messages.length) {
+    body.innerHTML = '<div style="color:var(--text3);font-size:12px">Sin respuestas en el hilo</div>';
+    return;
+  }
+
+  body.innerHTML = messages.map((msg, i) => {
+    const name = escHtml(msg.user_name || msg.user || '?');
+    const initial = name.charAt(0).toUpperCase();
+    const text = escHtml(msg.text || '');
+    const ts = msg.ts
+      ? new Date(parseFloat(msg.ts) * 1000).toLocaleString('es-MX', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short' })
+      : '';
+    const isLast = i === messages.length - 1;
+    return `
+      <div style="display:flex;flex-direction:column;gap:5px;padding:10px 0;${!isLast ? 'border-bottom:1px solid var(--border)' : ''}">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:22px;height:22px;border-radius:50%;background:var(--surface2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text2);flex-shrink:0">${initial}</div>
+          <span style="font-size:12px;color:var(--text);font-weight:500">${name}</span>
+          <span style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-left:auto">${ts}</span>
+        </div>
+        <div class="raw-msg" style="padding-left:30px;font-size:12px">${text}</div>
+      </div>`;
+  }).join('');
+}
+
+async function deleteReport(id) {
+  if (!confirm('¿Eliminar este reporte?\nNo volverá a aparecer en futuras sincronizaciones.')) return;
+
+  await fetch(`${API}/api/reports/${encodeURIComponent(id)}`, { method: 'DELETE' });
+
+  allReports = allReports.filter(r => r.id !== id);
+  allItems = allItems.filter(i => i.id !== id);
+  selectedId = null;
+
+  document.getElementById('detail-panel').innerHTML = `
+    <div class="empty-state">
+      <div class="empty-icon">⌗</div>
+      <p>Reporte eliminado</p>
+    </div>`;
+
+  renderList();
+  loadStats();
+}
+
+// ── Tasks ─────────────────────────────────────────────────────────────────────
+
+function selectTask(id) {
+  selectedTaskId = id;
+  selectedId = null;
+  renderList();
+  const t = allTasks.find(t => t.id === id);
+  if (!t) return;
+  const panel = document.getElementById('detail-panel');
+  const date = t.created_at ? new Date(t.created_at * 1000).toLocaleString('es-MX') : '';
+  const completedDate = t.completed_at ? new Date(t.completed_at * 1000).toLocaleString('es-MX') : '';
+  const estLabel = t.estimated_minutes ? fmtResTime(t.estimated_minutes) : '—';
+  const realLabel = t.actual_time_minutes ? fmtResTime(t.actual_time_minutes) : null;
+
+  const _resTime = t.actual_time_minutes;
+  let _resVal = '', _resUnit = 60;
+  if (_resTime) {
+    if (_resTime >= 60) { _resVal = (_resTime % 60 === 0) ? String(_resTime / 60) : (_resTime / 60).toFixed(1); }
+    else { _resVal = String(_resTime); _resUnit = 1; }
+  }
+  const _showRes = t.status === 'completada' || !!t.resolution_notes || !!_resTime;
+
+  panel.innerHTML = `
+    <div class="detail-header">
+      <div class="detail-title">${escHtml(t.title || 'Sin título')}</div>
+    </div>
+
+    <div class="detail-meta">
+      <span class="pill pill-${t.status || 'pendiente'}">${t.status || 'pendiente'}</span>
+      <span class="pill pill-${t.task_type || 'tarea'}">${t.task_type || 'tarea'}</span>
+      <span class="pill pill-${t.priority || 'media'}">${t.priority || 'media'}</span>
+      <span class="ts-label" title="Fecha de creación">📅 ${date}</span>
+      ${completedDate ? `<span class="completed-badge" title="Fecha de completado">✓ completada ${completedDate}</span>` : ''}
+      <select class="account-select" onchange="assignAccount('${id}','task',this.value)" title="Cuenta asociada">
+        <option value="">Sin cuenta</option>
+        ${allAccounts.map(a => `<option value="${a.id}" ${t.account_id === a.id ? 'selected' : ''}>${escHtml(a.name)}</option>`).join('')}
+      </select>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Descripción</div>
+      <div class="section-body"><div class="raw-msg">${escHtml(t.description || '')}</div></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Estimación</div>
+      <div class="section-body" style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:24px;align-items:flex-end">
+          <div>
+            <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">Estimado por IA</div>
+            <div class="est-big">${estLabel}</div>
+          </div>
+          ${realLabel ? `<div>
+            <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">Tiempo real</div>
+            <div class="est-real">${realLabel}</div>
+          </div>` : ''}
+        </div>
+        ${t.estimate_reason ? `<div style="font-size:12px;color:var(--text3);line-height:1.5">${escHtml(t.estimate_reason)}</div>` : ''}
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Estado</div>
+      <div class="section-body" style="display:flex;flex-direction:column;gap:12px">
+        <div class="status-actions">
+          <div class="status-btn-group ${t.status === 'pendiente' ? 'current' : ''}">
+            <button class="status-btn status-btn-pendiente" onclick="updateTaskStatus('${id}','pendiente')">pendiente</button>
+          </div>
+          <div class="status-btn-group ${t.status === 'en_proceso' ? 'current' : ''}">
+            <button class="status-btn status-btn-en_proceso" onclick="updateTaskStatus('${id}','en_proceso')">en proceso</button>
+          </div>
+          <div class="status-btn-group ${t.status === 'completada' ? 'current' : ''}">
+            <button class="status-btn status-btn-completada" onclick="toggleTaskResolution()">completada</button>
+          </div>
+        </div>
+
+        <div id="task-resolution-section" style="display:${_showRes ? 'flex' : 'none'};flex-direction:column;gap:10px;padding:12px;background:var(--surface2);border-radius:6px;border:1px solid var(--border)">
+          <div style="font-size:11px;color:var(--text3);letter-spacing:0.06em;text-transform:uppercase">Cierre de tarea</div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <span style="font-size:12px;color:var(--text2)">Tiempo real:</span>
+            <input type="number" id="task-time-value" class="resolution-time-input" placeholder="0" min="0" step="0.5" value="${_resVal}">
+            <select id="task-time-unit" class="resolution-time-unit">
+              <option value="60" ${_resUnit === 60 ? 'selected' : ''}>horas</option>
+              <option value="1" ${_resUnit === 1 ? 'selected' : ''}>minutos</option>
+            </select>
+          </div>
+          <textarea class="notes-area" id="task-res-notes" placeholder="¿Cómo lo resolviste? ¿Qué aprendiste?..." style="min-height:90px">${escHtml(t.resolution_notes || '')}</textarea>
+          <div><button class="save-btn" onclick="completeTask('${id}')">Guardar y completar</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:flex-end">
+      <button class="delete-btn" onclick="deleteTask('${id}')">Eliminar tarea</button>
+    </div>
+  `;
+}
+
+function showNewTaskForm() {
+  selectedId = null;
+  selectedTaskId = null;
+  renderList();
+  document.getElementById('detail-panel').innerHTML = `
+    <div class="new-task-panel">
+      <h2>Nueva tarea</h2>
+      <p>Describe la tarea con el mayor detalle posible. Claude generará el título y estimará el tiempo basándose en tu historial de resoluciones.</p>
+      <textarea class="notes-area" id="new-task-desc" placeholder="Ej: Revisar la configuración del módulo de permisos en Linkaform porque los usuarios reportan que no pueden acceder a ciertos formularios..." style="min-height:150px"></textarea>
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="save-btn" id="create-task-btn" onclick="submitNewTask()">Crear tarea</button>
+        <span id="create-task-status" class="creating-indicator" style="display:none">
+          <svg class="spinning" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          Claude está analizando...
+        </span>
+      </div>
+    </div>`;
+  document.getElementById('new-task-desc').focus();
+}
+
+async function submitNewTask() {
+  const desc = document.getElementById('new-task-desc')?.value.trim();
+  if (!desc) return;
+  const btn = document.getElementById('create-task-btn');
+  const statusEl = document.getElementById('create-task-status');
+  btn.disabled = true;
+  btn.textContent = 'Creando...';
+  if (statusEl) statusEl.style.display = 'flex';
+  try {
+    const res = await fetch(`${API}/api/tasks`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ description: desc }),
+    });
+    const task = await res.json();
+    if (task.error) throw new Error(task.error);
+    const taskItem = { ...task, item_type: 'tarea' };
+    allItems.unshift(taskItem);
+    allTasks.unshift(taskItem);
+    renderList();
+    selectTask(task.id);
+    loadStats();
+  } catch(e) {
+    if (statusEl) { statusEl.style.display = 'none'; }
+    btn.disabled = false;
+    btn.textContent = 'Crear tarea';
+  }
+}
+
+async function updateTaskStatus(id, status) {
+  await fetch(`${API}/api/tasks/${encodeURIComponent(id)}/status`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status }),
+  });
+  const t = allTasks.find(t => t.id === id);
+  if (t) { t.status = status; const item = allItems.find(i => i.id === id); if (item) item.status = status; }
+  selectTask(id);
+  renderList();
+  loadStats();
+}
+
+function toggleTaskResolution() {
+  const sec = document.getElementById('task-resolution-section');
+  if (!sec) return;
+  sec.style.display = 'flex';
+  sec.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+async function completeTask(id) {
+  const timeVal = parseFloat(document.getElementById('task-time-value').value) || 0;
+  const timeUnit = parseInt(document.getElementById('task-time-unit').value);
+  const notes = document.getElementById('task-res-notes').value;
+  const timeMinutes = Math.round(timeVal * timeUnit);
+  const btn = document.querySelector('#task-resolution-section .save-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Guardando...'; }
+  await fetch(`${API}/api/tasks/${encodeURIComponent(id)}/resolution`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ actual_time_minutes: timeMinutes, resolution_notes: notes }),
+  });
+  const nowTs = Math.floor(Date.now() / 1000);
+  const t = allTasks.find(t => t.id === id);
+  if (t) { t.status = 'completada'; t.actual_time_minutes = timeMinutes; t.resolution_notes = notes; t.completed_at = nowTs; const item = allItems.find(i => i.id === id); if (item) { item.status = 'completada'; item.actual_time_minutes = timeMinutes; item.completed_at = nowTs; } }
+  selectTask(id);
+  renderList();
+  loadStats();
+}
+
+async function deleteTask(id) {
+  if (!confirm('¿Eliminar esta tarea?')) return;
+  await fetch(`${API}/api/tasks/${encodeURIComponent(id)}`, { method: 'DELETE' });
+  allTasks = allTasks.filter(t => t.id !== id);
+  allItems = allItems.filter(i => i.id !== id);
+  selectedTaskId = null;
+  document.getElementById('detail-panel').innerHTML = `
+    <div class="empty-state"><div class="empty-icon">⌗</div><p>Tarea eliminada</p></div>`;
+  renderList();
+  loadStats();
+}
+
+// ── End Tasks ──────────────────────────────────────────────────────────────────
+
+function toggleResolutionForm() {
+  const sec = document.getElementById('resolution-section');
+  if (!sec) return;
+  sec.style.display = 'flex';
+  sec.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+async function saveResolution(id) {
+  const timeVal = parseFloat(document.getElementById('res-time-value').value) || 0;
+  const timeUnit = parseInt(document.getElementById('res-time-unit').value);
+  const cause = document.getElementById('res-cause').value;
+  const timeMinutes = Math.round(timeVal * timeUnit);
+
+  const btn = document.querySelector('#resolution-section .save-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Guardando...'; }
+
+  await fetch(`${API}/api/reports/${encodeURIComponent(id)}/resolution`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ resolution_time_minutes: timeMinutes, resolution_cause: cause }),
+  });
+
+  const nowTs = Math.floor(Date.now() / 1000);
+  const r = allReports.find(r => r.id === id);
+  if (r) { r.status = 'resuelto'; r.resolution_time_minutes = timeMinutes; r.resolution_cause = cause; r.completed_at = nowTs; const item = allItems.find(i => i.id === id); if (item) { item.status = 'resuelto'; item.resolution_time_minutes = timeMinutes; item.completed_at = nowTs; } }
+
+  selectReport(id);
+  renderList();
+  loadStats();
+}
+
+function fmtResTime(minutes) {
+  if (!minutes) return '';
+  if (minutes >= 60) {
+    const h = minutes / 60;
+    return (minutes % 60 === 0 ? h : h.toFixed(1)) + 'h';
+  }
+  return minutes + 'min';
+}
+
 function filterStatus(status, el) {
   currentStatusFilter = status;
+  selectedId = null;
+  selectedTaskId = null;
   document.querySelectorAll('.sidebar .nav-item').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
   const labels = { nuevo: 'Nuevos', visto: 'Vistos', en_revision: 'En revisión', en_proceso: 'En proceso', resuelto: 'Resueltos' };
-  document.getElementById('topbar-title').textContent = status ? (labels[status] || 'Reportes') : 'Todos los reportes';
-  loadReports();
+  document.getElementById('topbar-title').textContent = status ? (labels[status] || 'Bandeja') : 'Todos';
+  document.getElementById('detail-panel').innerHTML = `
+    <div class="empty-state">
+      <div class="empty-icon">⌗</div>
+      <p>Selecciona un elemento para ver el detalle</p>
+    </div>`;
+  loadItems();
+  loadStats();
 }
 
 async function syncNow() {
@@ -1046,7 +1770,7 @@ async function syncNow() {
     // Polling hasta que termine
     await waitForSync();
     await loadStats();
-    await loadReports();
+    await loadItems();
   } catch(e) {
     console.error('Sync error:', e);
   } finally {
@@ -1081,6 +1805,223 @@ function escHtml(str) {
     .replace(/</g,'&lt;')
     .replace(/>/g,'&gt;')
     .replace(/"/g,'&quot;');
+}
+
+// ── Cuentas ───────────────────────────────────────────────────────────────────
+
+const ACCOUNT_COLORS = ['#4db882','#60a5fa','#f59e0b','#a855f7','#ef4444','#14b8a6','#f97316','#06b6d4'];
+
+function accountColor(id) {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) & 0xffffffff;
+  return ACCOUNT_COLORS[Math.abs(h) % ACCOUNT_COLORS.length];
+}
+
+async function loadAccounts() {
+  try {
+    const res = await fetch(`${API}/api/accounts`);
+    allAccounts = await res.json();
+  } catch(e) { allAccounts = []; }
+  renderAccountsBar();
+}
+
+function renderAccountsBar() {
+  const container = document.getElementById('account-chips');
+  if (!container) return;
+  if (!allAccounts.length) {
+    container.innerHTML = '<span style="font-size:11px;color:var(--text3)">Sin cuentas registradas</span>';
+    return;
+  }
+  container.innerHTML = allAccounts.map(a => {
+    const color  = accountColor(a.id);
+    const initial = (a.name || '?').charAt(0).toUpperCase();
+    const isActive = accountFilter === a.id;
+    const userLabel = a.username ? `<span class="account-username">${escHtml(a.username)}</span>` : '';
+    return `
+      <button class="account-chip ${isActive ? 'active' : ''}" onclick="toggleAccountFilter('${a.id}')" title="${escHtml(a.name)}${a.username ? ' · ' + a.username : ''}">
+        <span class="account-avatar" style="background:${color}">${initial}</span>
+        ${escHtml(a.name)}${userLabel}
+      </button>`;
+  }).join('');
+}
+
+function toggleAccountFilter(id) {
+  if (accountFilter === id) {
+    accountFilter = null;
+    selectedAccountId = null;
+  } else {
+    accountFilter = id;
+    selectedAccountId = id;
+    showAccountDetail(id);
+  }
+  renderAccountsBar();
+  renderList();
+}
+
+function showAccountDetail(id) {
+  selectedId = null;
+  selectedTaskId = null;
+  renderList();
+
+  const acc = allAccounts.find(a => a.id === id);
+  if (!acc) return;
+
+  const color     = accountColor(acc.id);
+  const initial   = (acc.name || '?').charAt(0).toUpperCase();
+  const repCount  = allReports.filter(r => r.account_id === id).length;
+  const taskCount = allTasks.filter(t => t.account_id === id).length;
+  const since     = acc.created_at ? new Date(acc.created_at * 1000).toLocaleDateString('es-MX', { day:'2-digit', month:'short', year:'numeric' }) : '';
+
+  document.getElementById('detail-panel').innerHTML = `
+    <div class="detail-header">
+      <div style="display:flex;align-items:center;gap:12px;flex:1">
+        <div style="width:40px;height:40px;border-radius:50%;background:${color};display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;flex-shrink:0">${initial}</div>
+        <div>
+          <div class="detail-title" style="font-size:18px">${escHtml(acc.name)}</div>
+          ${acc.username ? `<div style="font-size:12px;color:var(--text3);font-family:'IBM Plex Mono',monospace">${escHtml(acc.username)}</div>` : ''}
+        </div>
+      </div>
+      <button class="delete-btn" onclick="archiveAccount('${id}')">Archivar</button>
+    </div>
+
+    <div class="detail-meta">
+      <span class="pill" style="background:rgba(77,184,130,0.15);color:var(--accent)">activa</span>
+      ${since ? `<span class="ts-label">desde ${since}</span>` : ''}
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-radius:8px;overflow:hidden;border:1px solid var(--border)">
+      <div style="background:var(--surface);padding:14px 18px">
+        <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">Reportes</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:500;color:var(--text)">${repCount}</div>
+      </div>
+      <div style="background:var(--surface);padding:14px 18px">
+        <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">Tareas</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:500;color:var(--text)">${taskCount}</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Editar cuenta</div>
+      <div class="section-body" style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em">Nombre</label>
+          <input type="text" id="acc-edit-name" class="notes-area" style="min-height:unset;padding:8px 10px;resize:none" value="${escHtml(acc.name)}">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em">Usuario</label>
+          <input type="text" id="acc-edit-user" class="notes-area" style="min-height:unset;padding:8px 10px;resize:none" value="${escHtml(acc.username || '')}">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em">Notas</label>
+          <textarea id="acc-edit-notes" class="notes-area" style="min-height:70px">${escHtml(acc.notes || '')}</textarea>
+        </div>
+        <div><button class="save-btn" onclick="saveAccountEdits('${id}')">Guardar cambios</button></div>
+      </div>
+    </div>`;
+}
+
+function showNewAccountForm() {
+  selectedId = null;
+  selectedTaskId = null;
+  accountFilter = null;
+  selectedAccountId = null;
+  renderAccountsBar();
+  renderList();
+
+  document.getElementById('detail-panel').innerHTML = `
+    <div class="new-task-panel">
+      <h2>Nueva cuenta en producción</h2>
+      <p>Registra una cuenta activa del proyecto para tenerla visible en el centro de mando.</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em">Nombre del cliente *</label>
+          <input type="text" id="new-acc-name" class="notes-area" style="min-height:unset;padding:8px 10px;resize:none" placeholder="Ej: Empresa ABC">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em">Usuario en el sistema</label>
+          <input type="text" id="new-acc-user" class="notes-area" style="min-height:unset;padding:8px 10px;resize:none" placeholder="Ej: empresa_abc">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em">Notas</label>
+          <textarea id="new-acc-notes" class="notes-area" style="min-height:70px" placeholder="Módulos activos, observaciones..."></textarea>
+        </div>
+      </div>
+      <div><button class="save-btn" id="new-acc-btn" onclick="createAccount()">Agregar cuenta</button></div>
+    </div>`;
+  document.getElementById('new-acc-name').focus();
+}
+
+async function createAccount() {
+  const name  = document.getElementById('new-acc-name')?.value.trim();
+  const uname = document.getElementById('new-acc-user')?.value.trim();
+  const notes = document.getElementById('new-acc-notes')?.value.trim();
+  if (!name) { document.getElementById('new-acc-name').focus(); return; }
+
+  const btn = document.getElementById('new-acc-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Guardando...'; }
+
+  try {
+    const res  = await fetch(`${API}/api/accounts`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, username: uname, notes }),
+    });
+    const acc = await res.json();
+    if (acc.error) throw new Error(acc.error);
+    allAccounts.push(acc);
+    renderAccountsBar();
+    toggleAccountFilter(acc.id);
+  } catch(e) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Agregar cuenta'; }
+  }
+}
+
+async function saveAccountEdits(id) {
+  const name  = document.getElementById('acc-edit-name')?.value.trim();
+  const uname = document.getElementById('acc-edit-user')?.value.trim();
+  const notes = document.getElementById('acc-edit-notes')?.value || '';
+  if (!name) return;
+
+  const btn = document.querySelector('#detail-panel .save-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Guardando...'; }
+
+  const res = await fetch(`${API}/api/accounts/${encodeURIComponent(id)}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, username: uname, notes }),
+  });
+  const updated = await res.json();
+  const idx = allAccounts.findIndex(a => a.id === id);
+  if (idx >= 0) allAccounts[idx] = updated;
+  renderAccountsBar();
+  showAccountDetail(id);
+}
+
+async function archiveAccount(id) {
+  if (!confirm('¿Archivar esta cuenta? Ya no aparecerá en el widget.')) return;
+  await fetch(`${API}/api/accounts/${encodeURIComponent(id)}`, { method: 'DELETE' });
+  allAccounts = allAccounts.filter(a => a.id !== id);
+  if (accountFilter === id) { accountFilter = null; }
+  renderAccountsBar();
+  renderList();
+  document.getElementById('detail-panel').innerHTML = `
+    <div class="empty-state"><div class="empty-icon">⌗</div><p>Cuenta archivada</p></div>`;
+}
+
+async function assignAccount(itemId, type, accountId) {
+  const endpoint = type === 'report'
+    ? `/api/reports/${encodeURIComponent(itemId)}/account`
+    : `/api/tasks/${encodeURIComponent(itemId)}/account`;
+  await fetch(`${API}${endpoint}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ account_id: accountId || null }),
+  });
+  const collection = type === 'report' ? allReports : allTasks;
+  const item = collection.find(i => i.id === itemId);
+  if (item) item.account_id = accountId || null;
+  const listItem = allItems.find(i => i.id === itemId);
+  if (listItem) listItem.account_id = accountId || null;
 }
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
@@ -1118,9 +2059,10 @@ function showApp(user, avatar) {
     wrap.innerHTML = `<div class="session-avatar-placeholder">${initials}</div>`;
   }
 
+  loadAccounts();
   loadStats();
-  loadReports();
-  setInterval(() => { loadStats(); loadReports(); }, 60000);
+  loadItems();
+  setInterval(() => { loadStats(); loadItems(); }, 60000);
 }
 
 async function doLogin() {
@@ -1160,6 +2102,28 @@ async function logout() {
   await fetch(`${API}/api/auth/logout`, { method: 'POST' });
   document.getElementById('session-info').style.display = 'none';
   showLogin();
+}
+
+// ── Filtro de fecha ───────────────────────────────────────────────────────────
+
+function applyDateFilter() {
+  dateFrom = document.getElementById('date-from')?.value || null;
+  dateTo   = document.getElementById('date-to')?.value   || null;
+  const clearBtn = document.getElementById('date-clear-btn');
+  if (clearBtn) clearBtn.style.display = (dateFrom || dateTo) ? 'inline-flex' : 'none';
+  renderList();
+}
+
+function clearDateFilter() {
+  dateFrom = null;
+  dateTo   = null;
+  const fromEl = document.getElementById('date-from');
+  const toEl   = document.getElementById('date-to');
+  if (fromEl) fromEl.value = '';
+  if (toEl)   toEl.value   = '';
+  const clearBtn = document.getElementById('date-clear-btn');
+  if (clearBtn) clearBtn.style.display = 'none';
+  renderList();
 }
 
 // Enter en los inputs del login

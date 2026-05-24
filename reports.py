@@ -86,23 +86,45 @@ def init_db():
     c = conn.cursor()
     c.execute("""
         CREATE TABLE IF NOT EXISTS reports (
-            id              TEXT PRIMARY KEY,
-            slack_ts        TEXT,
-            slack_channel   TEXT,
-            slack_user      TEXT,
-            slack_user_name TEXT,
-            raw_message     TEXT,
-            report_type     TEXT,
-            priority        TEXT,
-            summary         TEXT,
-            key_points      TEXT,
-            linkaform_id    TEXT,
-            linkaform_data  TEXT,
-            status          TEXT DEFAULT 'nuevo',
-            notes           TEXT DEFAULT '',
-            created_at      INTEGER,
-            updated_at      INTEGER
+            id                      TEXT PRIMARY KEY,
+            slack_ts                TEXT,
+            slack_channel           TEXT,
+            slack_user              TEXT,
+            slack_user_name         TEXT,
+            raw_message             TEXT,
+            report_type             TEXT,
+            priority                TEXT,
+            summary                 TEXT,
+            key_points              TEXT,
+            linkaform_id            TEXT,
+            linkaform_data          TEXT,
+            status                  TEXT DEFAULT 'nuevo',
+            notes                   TEXT DEFAULT '',
+            resolution_time_minutes INTEGER,
+            resolution_cause        TEXT DEFAULT '',
+            deleted                 INTEGER DEFAULT 0,
+            created_at              INTEGER,
+            updated_at              INTEGER
         )
+    """)
+    conn.commit()
+    # Migración para bases de datos existentes
+    for col, typedef in [
+        ("resolution_time_minutes", "INTEGER"),
+        ("resolution_cause", "TEXT DEFAULT ''"),
+        ("deleted", "INTEGER DEFAULT 0"),
+        ("completed_at", "INTEGER"),
+    ]:
+        try:
+            conn.execute(f"ALTER TABLE reports ADD COLUMN {col} {typedef}")
+            conn.commit()
+        except sqlite3.OperationalError:
+            pass  # columna ya existe
+    # Corregir created_at para que sea el timestamp del hilo de Slack, no de la sincronización
+    conn.execute("""
+        UPDATE reports
+        SET created_at = CAST(CAST(slack_ts AS REAL) AS INTEGER)
+        WHERE slack_ts IS NOT NULL AND slack_ts != '' AND CAST(slack_ts AS REAL) > 0
     """)
     conn.commit()
     conn.close()
@@ -121,6 +143,9 @@ def save_report(report: dict):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     now = int(time.time())
+    # Usar el timestamp del hilo de Slack como fecha de creación del reporte
+    slack_ts = report.get("slack_ts", "")
+    created_at = int(float(slack_ts)) if slack_ts else now
     c.execute("""
         INSERT INTO reports (
             id, slack_ts, slack_channel, slack_user, slack_user_name,
@@ -142,7 +167,7 @@ def save_report(report: dict):
         json.dumps(report.get("linkaform_data", {}), ensure_ascii=False),
         "nuevo",
         "",
-        now,
+        created_at,
         now,
     ))
     conn.commit()
@@ -395,11 +420,13 @@ def main():
         sys.exit(1)
     print(f"   ID del canal: {channel_id}")
 
-    # Procesar mensajes del canal
+    # Procesar mensajes del canal donde aparezca una mención al usuario
     print(f"\n📥 Jalando mensajes de #{SLACK_CHANNEL}...")
     messages = get_channel_messages(channel_id, limit=5)
-    print(f"   {len(messages)} mensajes encontrados")
-    for msg in messages:
+    mention_tag = f"<@{MY_USER_ID}>"
+    relevant = [m for m in messages if mention_tag in m.get("text", "")]
+    print(f"   {len(messages)} mensajes encontrados, {len(relevant)} con mención a @{MY_USER_ID}")
+    for msg in relevant:
         process_message(msg, SLACK_CHANNEL)
 
     # Procesar menciones
