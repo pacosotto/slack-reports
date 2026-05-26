@@ -939,6 +939,120 @@
     align-items: center;
     gap: 4px;
   }
+
+  /* ── Daily Standup ── */
+  .standup-view {
+    flex: 1;
+    overflow-y: auto;
+    padding: 28px 32px;
+    display: none;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .standup-view::-webkit-scrollbar { width: 4px; }
+  .standup-view::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  .standup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .standup-date {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    text-transform: capitalize;
+  }
+
+  .standup-day-btns { display: flex; gap: 6px; }
+
+  .standup-day-btn {
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border2);
+    background: none;
+    color: var(--text2);
+    font-size: 12px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .standup-day-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .standup-day-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+
+  .standup-group-title {
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .standup-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: var(--surface2);
+    color: var(--text2);
+  }
+
+  .standup-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .standup-row:last-child { border-bottom: none; }
+
+  .standup-check { color: var(--accent); font-size: 13px; flex-shrink: 0; }
+
+  .standup-row-title {
+    font-size: 13px;
+    color: var(--text);
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .standup-row-meta { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+
+  .standup-empty {
+    text-align: center;
+    color: var(--text3);
+    font-size: 13px;
+    padding: 48px 0;
+  }
+
+  .standup-total {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 4px;
+    border-top: 1px solid var(--border2);
+    font-size: 12px;
+    color: var(--text3);
+  }
+
+  .standup-total-val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--accent);
+  }
 </style>
 </head>
 <body>
@@ -956,6 +1070,14 @@
       </div>
     </div>
   </div>
+
+  <nav class="nav-section">
+    <label>Mi avance</label>
+    <button class="nav-item" id="nav-standup" onclick="showStandup()">
+      <span class="nav-dot" style="background:#a855f7"></span>
+      Daily Standup
+    </button>
+  </nav>
 
   <nav class="nav-section">
     <label>Bandeja</label>
@@ -1072,6 +1194,9 @@
       </div>
     </div>
   </div>
+
+  <!-- Daily Standup -->
+  <div class="standup-view" id="standup-view"></div>
 </main>
 
 <!-- Modal de login -->
@@ -1173,6 +1298,7 @@ async function loadItems() {
     allItems = []; allReports = []; allTasks = [];
   }
   renderList();
+  renderStandup();
 }
 
 function renderList() {
@@ -1739,6 +1865,8 @@ function filterStatus(status, el) {
   selectedTaskId = null;
   document.querySelectorAll('.sidebar .nav-item').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
+  document.querySelector('.content').style.display = '';
+  document.getElementById('standup-view').style.display = 'none';
   const labels = { nuevo: 'Nuevos', visto: 'Vistos', en_revision: 'En revisión', en_proceso: 'En proceso', resuelto: 'Resueltos' };
   document.getElementById('topbar-title').textContent = status ? (labels[status] || 'Bandeja') : 'Todos';
   document.getElementById('detail-panel').innerHTML = `
@@ -2132,6 +2260,106 @@ document.addEventListener('keydown', e => {
     doLogin();
   }
 });
+
+// ── Daily Standup ─────────────────────────────────────────────────────────────
+
+let standupDay = 'today';
+
+function showStandup(day) {
+  if (day) standupDay = day;
+  document.querySelectorAll('.sidebar .nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('nav-standup').classList.add('active');
+  document.querySelector('.content').style.display = 'none';
+  document.getElementById('standup-view').style.display = 'flex';
+  document.getElementById('topbar-title').textContent = 'Daily Standup';
+  renderStandup();
+}
+
+function renderStandup() {
+  const view = document.getElementById('standup-view');
+  if (!view || view.style.display === 'none') return;
+
+  const now = new Date();
+  const target = new Date(now);
+  if (standupDay === 'yesterday') target.setDate(target.getDate() - 1);
+
+  const startTs = new Date(target.getFullYear(), target.getMonth(), target.getDate(), 0, 0, 0).getTime() / 1000;
+  const endTs   = new Date(target.getFullYear(), target.getMonth(), target.getDate(), 23, 59, 59).getTime() / 1000;
+
+  const dateLabel = target.toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+  const doneTasks   = allTasks.filter(t =>
+    t.status === 'completada' && t.completed_at >= startTs && t.completed_at <= endTs
+  );
+  const doneReports = allReports.filter(r =>
+    r.status === 'resuelto' && r.completed_at >= startTs && r.completed_at <= endTs
+  );
+
+  const totalMinutes = [
+    ...doneTasks.map(t => t.actual_time_minutes || 0),
+    ...doneReports.map(r => r.resolution_time_minutes || 0)
+  ].reduce((a, b) => a + b, 0);
+
+  const isEmpty = !doneTasks.length && !doneReports.length;
+
+  view.innerHTML = `
+    <div class="standup-header">
+      <div class="standup-date">${dateLabel}</div>
+      <div class="standup-day-btns">
+        <button class="standup-day-btn ${standupDay === 'today' ? 'active' : ''}" onclick="showStandup('today')">Hoy</button>
+        <button class="standup-day-btn ${standupDay === 'yesterday' ? 'active' : ''}" onclick="showStandup('yesterday')">Ayer</button>
+      </div>
+    </div>
+
+    ${isEmpty ? `<div class="standup-empty">Sin actividad completada este día</div>` : ''}
+
+    ${doneTasks.length ? `
+      <div>
+        <div class="standup-group-title">
+          Tareas completadas
+          <span class="standup-count">${doneTasks.length}</span>
+        </div>
+        <div class="section">
+          ${doneTasks.map(t => `
+            <div class="standup-row">
+              <span class="standup-check">✓</span>
+              <span class="standup-row-title" title="${escHtml(t.title || '')}">${escHtml(t.title || t.description || '')}</span>
+              <div class="standup-row-meta">
+                <span class="pill pill-${t.task_type || 'tarea'}">${t.task_type || 'tarea'}</span>
+                ${t.actual_time_minutes ? `<span class="res-time-badge">${fmtResTime(t.actual_time_minutes)}</span>` : ''}
+              </div>
+            </div>`).join('')}
+        </div>
+      </div>` : ''}
+
+    ${doneReports.length ? `
+      <div>
+        <div class="standup-group-title">
+          Reportes resueltos
+          <span class="standup-count">${doneReports.length}</span>
+        </div>
+        <div class="section">
+          ${doneReports.map(r => `
+            <div class="standup-row">
+              <span class="standup-check">✓</span>
+              <span class="standup-row-title" title="${escHtml(r.summary || '')}">${escHtml(r.summary || r.raw_message?.substring(0, 90) || '')}</span>
+              <div class="standup-row-meta">
+                <span class="pill pill-type-reporte">reporte</span>
+                ${r.resolution_time_minutes ? `<span class="res-time-badge">${fmtResTime(r.resolution_time_minutes)}</span>` : ''}
+              </div>
+            </div>`).join('')}
+        </div>
+      </div>` : ''}
+
+    ${totalMinutes ? `
+      <div class="standup-total">
+        <span>Tiempo total invertido</span>
+        <span class="standup-total-val">${fmtResTime(totalMinutes)}</span>
+      </div>` : ''}
+  `;
+}
+
+// ── End Daily Standup ──────────────────────────────────────────────────────────
 
 // Init
 checkAuth();
